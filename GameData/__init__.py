@@ -1,2 +1,2 @@
 from GameData.Exceptions import *
-from GameData.GameDataController import *
+from GameData.GameDataControllers import *

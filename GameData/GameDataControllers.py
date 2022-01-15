@@ -1,10 +1,8 @@
 from json import loads, dumps
 from os.path import exists
-from cryptography.fernet import Fernet
-import GameData.Exceptions as Exceptions
 
 
-class GameDataController(object):
+class PlainTextGameDataController(object):
     """
         A Class used to manipulate data stored as JSON.
         This Class will be specialised for storage of GameData
@@ -22,16 +20,16 @@ class GameDataController(object):
 
         #Initialise all variables
         self.__file_location = file_location
-        self.__file = self.__get_file(self.__file_location)
         self.__key = self.__load_fernet_key()
         self.__fernet = Fernet(self.__key)
+        self.__file = self.__get_file(self.__file_location)
         self.__data = self.__load_file_data_as_dict()
 
         #Add multiple names to each function
         self.add_variable = self.create_variable
 
     #PRIVATE FUNCTIONS#
-    def __get_file(self, file_location: str, mode:str = "rb"):
+    def __get_file(self, file_location: str, mode:str = "r"):
         """
             PRIVATE FUNCTION
             If you call this function, it may damage the file contents and has fatal effects on your data
@@ -40,8 +38,8 @@ class GameDataController(object):
         if exists(file_location):
             file = open(file_location, mode)
         else:
-            create = open(file_location, "xb") #Create the file
-            create.write(b"{}")
+            create = open(file_location, "x") #Create the file
+            create.write("{}")
             create.close()
             file = open(file_location, mode)
         return file
@@ -71,59 +69,25 @@ class GameDataController(object):
             If you call this function, it may damage the file contents and has fatal effects on your data
         """
         out = None
-        try:
-            out = self.__file.read().decode()
-            if len(out) == 0:
-                self.__file.write(b"{}")
-                out = self.__load_file_data_as_dict()
-        except:
-            out = self.__file.read()
-            if len(out) == 0:
-                self.__file.close()
-                self.__file = self.__get_file(file_location=self.__file_location, mode="wb")
-                self.__file.write(b"{}")
-                self.__file.close()
-                self.__file = self.__get_file(file_location=self.__file_location)
-                out = self.__load_file_data_as_dict()
+        encrypted_out = self.__file.read()
+        out = self.__decrypt(encrypted_out).decode()
+        out = out[1:-1]
+        if len(out) == 0:
+            self.__file.write(self.__encrypt("{}"))
+            out = self.__load_file_data_as_dict()
         return loads(out)
-    
-    def __load_file_data_as_bytes(self)->bytes:
-        """
-            PRIVATE FUNCTION
-            If you call this function, it may damage the file contents and has fatal effects on your data
-        """
-        out = None
-        try:
-            out = self.__file.read().encode()
-        except:
-            out = self.__file.read()
-        return out
-    
-    def __encrypt(self, data: bytes)->bytes:
-        """
-            PRIVATE FUNCTION
-            If you call this function, it may damage the file contents and has fatal effects on your data
-        """
-        return self.__fernet.encrypt(data)
-    
-    def __decrypt(self, data:bytes)->bytes:
-        """
-            PRIVATE FUNCTION
-            If you call this function, it may damage the file contents and has fatal effects on your data
-        """
-        return self.__fernet.decrypt(data)
 
     def __save(self):
         """
             PRIVATE FUNCTION
             If you call this function, it may damage the file contents and has fatal effects on your data
         """
-        write_data = str(self.__data).encode()
+        write_data = self.__data
         self.__file.close()
-        self.__file = open(self.__file_location, "wb")
+        self.__file = open(self.__file_location, "w")
         self.__file.write(write_data)
         self.__file.close()
-        self.__file = open(self.__file_location, "rb")
+        self.__file = open(self.__file_location, "r")
 
     #PUBLIC FUNCTIONS#
     def create_variable(self, name, value):
@@ -135,7 +99,7 @@ class GameDataController(object):
         if name in self.__data: #If it already exists, raise an error
             raise IndexError(f"Variable with name '{name}' already exists in Game Data")
         else: #If it doesn't exist, create it
-            self.__data[name] = value
+            self.__data[name] = self.__encrypt(value)
         self.__save()
 
     def get_variable(self, name):
