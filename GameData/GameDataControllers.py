@@ -1,5 +1,6 @@
 from json import loads, dumps
 from os.path import exists
+import GameData.Exceptions as Exceptions
 
 
 class PlainTextGameDataController(object):
@@ -20,8 +21,6 @@ class PlainTextGameDataController(object):
 
         #Initialise all variables
         self.__file_location = file_location
-        self.__key = self.__load_fernet_key()
-        self.__fernet = Fernet(self.__key)
         self.__file = self.__get_file(self.__file_location)
         self.__data = self.__load_file_data_as_dict()
 
@@ -43,25 +42,6 @@ class PlainTextGameDataController(object):
             create.close()
             file = open(file_location, mode)
         return file
-
-    def __load_fernet_key(self)->bytes:
-        """
-            PRIVATE FUNCTION
-            If you call this function, it may damage the file contents and has fatal effects on your data
-        """
-        if exists("egtgdcek.k3y"):
-            f = open("egtgdcek.k3y", "rb")
-            key = f.read()
-            if type(key) != bytes:
-                key = None
-                raise Exceptions.FatalError("Fatal Error: Key could not be resolved")
-            return key
-        else:
-            f = open("egtgdcek.k3y", "xb")
-            key = Fernet.generate_key()
-            f.write(key)
-            f.close()
-            return self.__load_fernet_key()
 
     def __load_file_data_as_dict(self)->dict:
         """
