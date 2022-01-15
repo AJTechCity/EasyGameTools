@@ -22,7 +22,7 @@ class GameDataController(object):
         self.__key = None
         self.__fernet = None
         self.__data = None
-        self.__file = __get_file(self.__file_location)
+        self.__file = self.__get_file(self.__file_location)
 
     def __get_file(self, file_location: str):
         file = None
