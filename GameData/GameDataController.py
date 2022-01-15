@@ -26,7 +26,7 @@ class GameDataController(object):
         self.__fernet = Fernet(self.__key)
         self.__data_str = self.__load_file_data_as_str()
 
-    #PRIVATE FUNCTIONS
+    #PRIVATE FUNCTIONS#
     def __get_file(self, file_location: str):
         """
             PRIVATE FUNCTION
@@ -98,8 +98,7 @@ class GameDataController(object):
         """
         return self.__fernet.decrypt(data)
 
-    #PUBLIC FUNCTIONS
-
+    #PUBLIC FUNCTIONS#
     def create_variable(self, name, value):
         """
             Creates a variable in your game data
