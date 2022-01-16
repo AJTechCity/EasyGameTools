@@ -126,6 +126,9 @@ class PlainTextGameDataController(object):
     def view_all_variables(self):
         print(self.__data)
 
+    def get_all_variables(self):
+        return self.__data
+
 class GameDataController(object):
     """
         A Class used to manipulate data stored as JSON.
@@ -251,11 +254,9 @@ class GameDataController(object):
         
         if not in_list:
             self.__data[enc_name] = enc_value
-            print("Added Variable")
 
         if not items:
             self.__data[enc_name] = enc_value
-            print("Added variabled")
         self.__save()
 
     def get_variable(self, name):
