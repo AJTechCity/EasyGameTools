@@ -1,5 +1,3 @@
-# EasyGameTools
-
 # Easy Game Tools
 
 How to install:
