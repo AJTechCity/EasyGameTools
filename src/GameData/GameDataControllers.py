@@ -1,6 +1,6 @@
 from json import loads, dumps
+from os import remove
 from os.path import exists
-import GameData.Exceptions as Exceptions
 from cryptography.fernet import Fernet
 
 
@@ -125,6 +125,35 @@ class PlainTextGameDataController(object):
 
     def get_all_variables(self):
         return self.__data
+
+    def delete_data(self, show_warning = True):
+        if show_warning:
+            chosen = False
+            while not chosen:
+                option = str(input("Are you sure you want to delete all data?(Y/N): ")).upper()
+                if option == "Y":
+                    chosen = True
+                    self.__data = {}
+                    self.__save()
+                elif option == "N":
+                    chosen = True
+                    pass
+        else:
+            self.__data = {}
+            self.__save()
+    
+    def delete_data_file(self, show_warning = True):
+        if exists(self.__file_location):
+            if show_warning:
+                while not chosen:
+                    option = str(input("Are you sure you want to delete the data file?(Y/N): ")).upper()
+                    if option == "Y":
+                        chosen = True
+                    elif option == "N":
+                        chosen = True
+                        pass
+            else:
+                remove(self.__file_location)
 
 class GameDataController(object):
     """
@@ -306,3 +335,50 @@ class GameDataController(object):
         for key, value in self.__data.items():
             decoded_data[self.__decrypt(key)] = self.__decrypt(value)
         return dict(decoded_data)
+    
+    def delete_data(self, show_warning = True):
+        """
+            Deletes the data stored in the class and the file
+            Call it by:
+                controller.delete_data()
+            It will ask for verification in the console. If this is not required add the parameter show_warning = False. 
+            Example:
+                controller.delete_data(show_warning=False)
+            **This will show no warning and delete data in the class and file instantly**
+        """
+        if show_warning:
+            chosen = False
+            while not chosen:
+                option = str(input("Are you sure you want to delete all data?(Y/N): ")).upper()
+                if option == "Y":
+                    chosen = True
+                    self.__data = {}
+                    self.__save()
+                elif option == "N":
+                    chosen = True
+                    pass
+        else:
+            self.__data = {}
+            self.__save()
+    
+    def delete_data_file(self, show_warning = True):
+        """
+            Deletes the file that stores the data but keeps the data in the class
+            Call it by:
+                controller.delete_data_file()
+            It will ask for verification in the console. If this is not required add the parameter show_warning = False. 
+            Example:
+                controller.delete_data_file(show_warning=False)
+            **This will show no warning and delete data in the file and delete the file instantly, but the data will stay in the class until deleted**
+        """
+        if exists(self.__file_location):
+            if show_warning:
+                while not chosen:
+                    option = str(input("Are you sure you want to delete the data file?(Y/N): ")).upper()
+                    if option == "Y":
+                        chosen = True
+                    elif option == "N":
+                        chosen = True
+                        pass
+            else:
+                remove(self.__file_location)
