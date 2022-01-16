@@ -303,18 +303,12 @@ class GameDataController(object):
         self.__save()
     
     def view_all_variables(self):
-        print(self.__data)
-    
-    def view_all_decoded_variables(self):
         decoded_data = {}
         for key, value in self.__data.items():
             decoded_data[self.__decrypt(key)] = self.__decrypt(value)
         print(decoded_data)
-
-    def get_all_variables(self):
-        return self.__data
     
-    def get_all_decoded_variables(self):
+    def get_all_variables(self):
         decoded_data = {}
         for key, value in self.__data.items():
             decoded_data[self.__decrypt(key)] = self.__decrypt(value)
