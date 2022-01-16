@@ -1,4 +1,4 @@
-from distutils.core import setup
+from distutils.core import setup, find_packages
 setup(
   name = 'EasyGameTools',
   packages = ['EasyGameTools'],
@@ -12,7 +12,7 @@ setup(
   keywords = ['Data Handling', 'Data', 'Encrypted'],
   install_requires=[
           'cryptography'
-      ],
+  ],
   classifiers=[
     'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
@@ -23,4 +23,6 @@ setup(
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
   ],
+  package_dir={"":"src"},
+  packages=find_packages(where="src"),
 )
