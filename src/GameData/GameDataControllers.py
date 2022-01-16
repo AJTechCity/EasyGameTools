@@ -122,9 +122,6 @@ class PlainTextGameDataController(object):
             print(f"\033[2;34;41m Variable with name '{name}' does not exist in Game Data.\nThis doesn't raise an error but it is not recommended to do this\033[0m")
         self.__data.pop(name, None)
         self.__save()
-    
-    def view_all_variables(self):
-        print(self.__data)
 
     def get_all_variables(self):
         return self.__data
@@ -302,12 +299,6 @@ class GameDataController(object):
         if not deleted and not ignore_warning:
             print(f"\033[2;34;41m Variable with name '{name}' does not exist in Game Data.\nThis doesn't raise an error but it is not recommended to do this\033[0m")
         self.__save()
-    
-    def view_all_variables(self):
-        decoded_data = {}
-        for key, value in self.__data.items():
-            decoded_data[self.__decrypt(key)] = self.__decrypt(value)
-        print(decoded_data)
     
     def get_all_variables(self):
         decoded_data = {}
