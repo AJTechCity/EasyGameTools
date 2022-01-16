@@ -243,13 +243,16 @@ class GameDataController(object):
         enc_name = self.__encrypt(name)
         enc_value = self.__encrypt(value)
         items = False
+        in_list = False
         for key, value in self.__data.items():
             items = True
             if self.__decrypt(key) == name:
                 raise IndexError(f"Variable with name '{name}' already exists in Game Data")
-            else:
-                self.__data[enc_name] = enc_value
-                print("Added variabled")
+        
+        if not in_list:
+            self.__data[enc_name] = enc_value
+            print("Added Variable")
+
         if not items:
             self.__data[enc_name] = enc_value
             print("Added variabled")
