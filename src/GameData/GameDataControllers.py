@@ -147,10 +147,11 @@ class GameDataController(object):
             Intialises the GameDataController object
             Call it by:
                 controller = GameDataController(path_to_file)
+            Make sure the path_to_file does not contain the custom file extension
         """
 
         #Initialise all variables
-        self.__file_location = file_location
+        self.__file_location = file_location+".atcfl"
         self.__key = self.__get_key_from_file()
         self.__fernet = self.__setup__fernet()
         self.__file = self.__get_file(self.__file_location)
@@ -214,9 +215,9 @@ class GameDataController(object):
     
     def __get_key_from_file(self)->bytes:
         try:
-            return open("egtgdcek.k3y", "rb").read()
+            return open("egdgcek.ajtck3y", "rb").read()
         except:
-            file = open("egtgdcek.k3y", "xb")
+            file = open("egdgcek.ajtck3y", "xb")
             file.write(Fernet.generate_key())
             file.close()
             return self.__get_key_from_file()
