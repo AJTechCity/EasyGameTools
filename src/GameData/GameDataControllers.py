@@ -168,7 +168,7 @@ class GameDataController(object):
         *********************************************************
         
         Example:
-        controller = PlainTextGameDataController("data.gdcdfile")
+        controller = GameDataController("data.gdcdfile")
     """
 
     def __init__(self, file_location: str):
